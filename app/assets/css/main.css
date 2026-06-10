@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme static {
+  --font-sans: 'Outfit', sans-serif;
+  --font-serif: 'Instrument Serif', sans-serif;
+  --font-mono: 'Cascadia Code', sans-serif;
+}
+
+:root {
+  --ui-primary: black;
+  --ui-secondary: #eff1f3;
+  --ui-text-highlighted: #000000;
+  --ui-text-dimmed: #333333;
+  --ui-text: #000000;
+  --ui-bg: #ffffff;
+  --ui-bg-elevated: #f8fafc;
+  --ui-bg-muted: #f1f5f9;
+}
+
+.dark {
+  --ui-primary: white;
+  --ui-text-highlighted: #ffffff;
+  --ui-text-dimmed: #cccccc;
+  --ui-text: #ffffff;
+  --ui-bg: #000000;
+  --ui-bg-elevated: #111111;
+  --ui-bg-muted: #1a1a1a;
+}
+
+@theme {
+  --color-primary-700: #000;
+  --color-primary-500: #000;
+  --color-primary-100: #000;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+  }
+}
+
+:root {
+  --ui-header-height: --spacing(16);
+}
+
+/* trolly */
+@keyframes float1 {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* cookie */
+@keyframes float2 {
+  0% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-1px) translateX(3px);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
+
+/* top */
+@keyframes float3 {
+  0% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-3px) translateX(3px);
+  }
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+}
+
+@keyframes float4 {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(3deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes float5 {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+.float1 {
+  animation: float1 2s ease-in-out infinite;
+}
+.float2 {
+  animation: float2 2s ease-in-out infinite;
+}
+.float3 {
+  animation: float3 2s ease-in-out infinite;
+}
+.float4 {
+  animation: float4 2s ease-in-out infinite;
+}
+.float5 {
+  animation: float5 2s ease-in-out infinite;
+}
