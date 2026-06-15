@@ -10,7 +10,7 @@
       <aside class="col-span-12 lg:col-span-3 sticky top-24 self-start h-fit">
 
         <!-- Search -->
-        <UInput v-model="search" icon="i-lucide-search" placeholder="Search Brand, Model or Variant" class="mb-6" />
+        <!-- <UInput v-model="search" icon="i-lucide-search" placeholder="Search Brand, Model or Variant" class="mb-6" /> -->
 
         <!-- Active Filters pill strip -->
         <!-- <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 mb-6">
@@ -240,6 +240,7 @@ function updateRouteQuery() {
   if (selectedTags.value.length) query.tag = selectedTags.value.join(',')
 
   router.replace({
+    path: '/brands',
     query
   })
 }
@@ -277,6 +278,9 @@ function toggleFilter(type: 'category' | 'brand' | 'tag', value: string) {
     if (idx > -1) {
       selectedTags.value.splice(idx, 1)
     } else {
+      if (selectedTags.value.length >= 2) {
+        selectedTags.value.shift() // Maintain max 2 selected tags by removing the oldest one
+      }
       selectedTags.value.push(value)
     }
   }

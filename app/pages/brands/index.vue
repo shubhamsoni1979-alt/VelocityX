@@ -13,53 +13,33 @@
         <UInput v-model="search" icon="i-lucide-search" placeholder="Search Brand, Model or Variant" class="mb-6" />
 
         <!-- Active Filters pill strip -->
-        <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 mb-6">
+        <!-- <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 mb-6">
           <template v-for="category in selectedCategories" :key="`cat-${category}`">
-            <UBadge
-              color="primary"
-              variant="solid"
-              class="cursor-pointer gap-1"
-              @click="toggleFilter('category', category)"
-            >
+            <UBadge color="primary" variant="solid" class="cursor-pointer gap-1"
+              @click="toggleFilter('category', category)">
               {{ category }} &nbsp;×
             </UBadge>
           </template>
-          <template v-for="brand in selectedBrands" :key="`brand-${brand}`">
-            <UBadge
-              color="primary"
-              variant="solid"
-              class="cursor-pointer"
-              @click="toggleFilter('brand', brand)"
-            >
+<template v-for="brand in selectedBrands" :key="`brand-${brand}`">
+            <UBadge color="primary" variant="solid" class="cursor-pointer" @click="toggleFilter('brand', brand)">
               {{ brand }} &nbsp;×
             </UBadge>
           </template>
-          <template v-for="tag in selectedTags" :key="`tag-${tag}`">
-            <UBadge
-              color="primary"
-              variant="solid"
-              class="cursor-pointer"
-              @click="toggleFilter('tag', tag)"
-            >
+<template v-for="tag in selectedTags" :key="`tag-${tag}`">
+            <UBadge color="primary" variant="solid" class="cursor-pointer" @click="toggleFilter('tag', tag)">
               {{ tag }} &nbsp;×
             </UBadge>
           </template>
-          <UButton size="xs" variant="ghost" color="error" @click="clearAllFilters">
-            Clear all
-          </UButton>
-        </div>
+<UButton size="xs" variant="ghost" color="error" @click="clearAllFilters">
+  Clear all
+</UButton>
+</div> -->
 
         <!-- Body Type -->
         <p class="text-xl font-bold mb-3">Body Type</p>
         <div class="flex flex-col gap-2.5 mb-6">
-          <UCheckbox
-            v-for="category in categories"
-            :key="category"
-            :model-value="selectedCategories.includes(category)"
-            :label="category"
-            color="primary"
-            @update:model-value="toggleFilter('category', category)"
-          />
+          <UCheckbox v-for="category in categories" :key="category" :model-value="selectedCategories.includes(category)"
+            :label="category" color="primary" @update:model-value="toggleFilter('category', category)" />
         </div>
 
         <USeparator class="mb-6" />
@@ -67,14 +47,8 @@
         <!-- Brands -->
         <p class="text-xl font-bold mb-3">Brands</p>
         <div class="flex flex-col gap-2.5 mb-6 max-h-60 overflow-y-auto pr-2">
-          <UCheckbox
-            v-for="brand in brands"
-            :key="brand"
-            :model-value="selectedBrands.includes(brand)"
-            :label="brand"
-            color="primary"
-            @update:model-value="toggleFilter('brand', brand)"
-          />
+          <UCheckbox v-for="brand in brands" :key="brand" :model-value="selectedBrands.includes(brand)" :label="brand"
+            color="primary" @update:model-value="toggleFilter('brand', brand)" />
         </div>
 
         <USeparator class="mb-6" />
@@ -82,14 +56,8 @@
         <!-- Fuel & Features -->
         <p class="text-xl font-bold mb-3">Fuel & Features</p>
         <div class="flex flex-col gap-2.5">
-          <UCheckbox
-            v-for="tag in tags"
-            :key="tag"
-            :model-value="selectedTags.includes(tag)"
-            :label="tag"
-            color="primary"
-            @update:model-value="toggleFilter('tag', tag)"
-          />
+          <UCheckbox v-for="tag in tags" :key="tag" :model-value="selectedTags.includes(tag)" :label="tag"
+            color="primary" @update:model-value="toggleFilter('tag', tag)" />
         </div>
       </aside>
 
@@ -106,8 +74,7 @@
             </span>
             car{{ filteredCars.length !== 1 ? 's' : '' }} found
           </p>
-          <USelect v-model="sort" :options="sortOptions" option-attribute="label" value-attribute="value"
-            class="w-48" />
+          <USelect v-model="sort" :items="sortOptions" class="w-48" />
         </div>
 
         <!-- Empty state -->
@@ -122,12 +89,7 @@
 
         <!-- Car Grid -->
         <div v-else class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-6">
-          <CarCard v-for="car in visibleCars" :key="car.id" :data="car"
-            :selected-category="selectedCategories.includes(car.category) ? car.category : ''"
-            :selected-brand="selectedBrands.includes(car.brand) ? car.brand : ''"
-            :selected-tag="selectedTags.includes(car.fuel) ? car.fuel : (selectedTags.includes(car.transmission) ? car.transmission : '')"
-            @filter-category="toggleFilter('category', $event)" @filter-brand="toggleFilter('brand', $event)"
-            @filter-tag="toggleFilter('tag', $event)" />
+          <CarCard v-for="car in visibleCars" :key="car.id" :data="car" />
         </div>
 
         <!-- Infinite scroll trigger -->
@@ -147,6 +109,7 @@ import { allCars, type Car } from '~/data/cars'
 
 const route = useRoute()
 const router = useRouter()
+const toast = useToast()
 
 // SEO Meta
 useSeoMeta({
@@ -194,6 +157,12 @@ function syncFiltersFromRoute() {
   // 1. Sync from route query params
   if (route.query.q) {
     search.value = String(route.query.q)
+  }
+
+  if (route.query.sort) {
+    sort.value = String(route.query.sort)
+  } else {
+    sort.value = 'asc'
   }
 
   if (route.query.tag) {
@@ -268,17 +237,19 @@ function updateRouteQuery() {
   const query: Record<string, any> = {}
 
   if (search.value) query.q = search.value
+  if (sort.value && sort.value !== 'asc') query.sort = sort.value
   if (selectedCategories.value.length) query.category = selectedCategories.value.join(',')
   if (selectedBrands.value.length) query.brand = selectedBrands.value.join(',')
   if (selectedTags.value.length) query.tag = selectedTags.value.join(',')
 
   router.replace({
+    path: '/brands',
     query
   })
 }
 
-// Watch search input to update route query and reset pagination
-watch(search, () => {
+// Watch search and sort inputs to update route query and reset pagination
+watch([search, sort], () => {
   page.value = 1
   updateRouteQuery()
 })
@@ -296,6 +267,14 @@ function toggleFilter(type: 'category' | 'brand' | 'tag', value: string) {
     if (idx > -1) {
       selectedCategories.value.splice(idx, 1)
     } else {
+      if (selectedCategories.value.length >= 2) {
+        toast.add({
+          title: 'Limit Reached',
+          description: 'You can select a maximum of 2 body types.',
+          color: 'warning'
+        })
+        return
+      }
       selectedCategories.value.push(value)
     }
   } else if (type === 'brand') {
@@ -303,6 +282,14 @@ function toggleFilter(type: 'category' | 'brand' | 'tag', value: string) {
     if (idx > -1) {
       selectedBrands.value.splice(idx, 1)
     } else {
+      if (selectedBrands.value.length >= 2) {
+        toast.add({
+          title: 'Limit Reached',
+          description: 'You can select a maximum of 2 brands.',
+          color: 'warning'
+        })
+        return
+      }
       selectedBrands.value.push(value)
     }
   } else if (type === 'tag') {
@@ -310,6 +297,14 @@ function toggleFilter(type: 'category' | 'brand' | 'tag', value: string) {
     if (idx > -1) {
       selectedTags.value.splice(idx, 1)
     } else {
+      if (selectedTags.value.length >= 2) {
+        toast.add({
+          title: 'Limit Reached',
+          description: 'You can select a maximum of 2 tags under Fuel & Features.',
+          color: 'warning'
+        })
+        return
+      }
       selectedTags.value.push(value)
     }
   }
