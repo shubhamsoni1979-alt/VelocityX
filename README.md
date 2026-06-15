@@ -14,7 +14,7 @@ VelocityX is built on a modern, high-performance web stack:
 *   **UI Component Library:** [Nuxt UI](https://ui.nuxt.com/) (v4.8.2) - Premium, ready-made Vue components with built-in Tailwind integration, icons, and transitions.
 *   **Styling & Design System:** [Tailwind CSS](https://tailwindcss.com/) (v4.3.0) via `@nuxtjs/tailwindcss` and `@tailwindcss/vite` for rapid utility-first styling.
 *   **Asset Management:** [Nuxt Image](https://image.nuxt.com/) (v2.0.0) - High-performance image loading, responsive formats, and optimization.
-*   **Data Validation:** [Zod](https://github.com/colinhacks/zod) (v4.4.3) - Schema validation library for data safety.
+
 
 ---
 
