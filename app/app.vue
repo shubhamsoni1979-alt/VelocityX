@@ -4,5 +4,7 @@
   </NuxtLayout>
   <UToaster />
 </template>
-<script>
+<script >
+
+
 </script>
