@@ -14,71 +14,49 @@
 
         <!-- Active Filters pill strip -->
         <!-- <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 mb-6">
-          <UBadge
-            v-if="selectedCategory"
-            color="primary"
-            variant="solid"
-            class="cursor-pointer gap-1"
-            @click="selectedCategory = ''"
-          >
-            {{ selectedCategory }} &nbsp;×
-          </UBadge>
-          <UBadge
-            v-if="selectedBrand"
-            color="primary"
-            variant="solid"
-            class="cursor-pointer"
-            @click="selectedBrand = ''"
-          >
-            {{ selectedBrand }} &nbsp;×
-          </UBadge>
-          <UBadge
-            v-if="selectedTag"
-            color="primary"
-            variant="solid"
-            class="cursor-pointer"
-            @click="selectedTag = ''"
-          >
-            {{ selectedTag }} &nbsp;×
-          </UBadge>
-          <UButton size="xs" variant="ghost" color="error" @click="clearAllFilters">
-            Clear all
-          </UButton>
-        </div> -->
+          <template v-for="category in selectedCategories" :key="`cat-${category}`">
+            <UBadge color="neutral" class="cursor-pointer gap-1" @click="toggleFilter('category', category)">
+              {{ category }} &nbsp;×
+            </UBadge>
+          </template>
+<template v-for="brand in selectedBrands" :key="`brand-${brand}`">
+            <UBadge color="neutral" class="cursor-pointer" @click="toggleFilter('brand', brand)">
+              {{ brand }} &nbsp;×
+            </UBadge>
+          </template>
+<template v-for="tag in selectedTags" :key="`tag-${tag}`">
+            <UBadge color="neutral" class="cursor-pointer" @click="toggleFilter('tag', tag)">
+              {{ tag }} &nbsp;×
+            </UBadge>
+          </template>
+<UButton size="xs" variant="ghost" color="error" @click="clearAllFilters">
+  Clear all
+</UButton>
+</div> -->
 
         <!-- Body Type -->
         <p class="text-xl font-bold mb-3">Body Type</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <UBadge v-for="category in categories" :key="category"
-            :color="selectedCategory === category ? 'primary' : 'neutral'"
-            :variant="selectedCategory === category ? 'solid' : 'soft'" class="cursor-pointer select-none"
-            @click="toggleFilter('category', category)">
-            {{ category }}
-          </UBadge>
+        <div class="flex flex-col gap-2.5 mb-6">
+          <UCheckbox v-for="category in categories" :key="category" :model-value="selectedCategories.includes(category)"
+            :label="category" color="primary" @update:model-value="toggleFilter('category', category)" />
         </div>
 
         <USeparator class="mb-6" />
 
         <!-- Brands -->
         <p class="text-xl font-bold mb-3">Brands</p>
-        <div class="flex flex-wrap gap-2 mb-6">
-          <UBadge v-for="brand in brands" :key="brand" :color="selectedBrand === brand ? 'primary' : 'neutral'"
-            :variant="selectedBrand === brand ? 'solid' : 'soft'" class="cursor-pointer select-none"
-            @click="toggleFilter('brand', brand)">
-            {{ brand }}
-          </UBadge>
+        <div class="flex flex-col gap-2.5 mb-6 max-h-60 overflow-y-auto pr-2">
+          <UCheckbox v-for="brand in brands" :key="brand" :model-value="selectedBrands.includes(brand)" :label="brand"
+            color="primary" @update:model-value="toggleFilter('brand', brand)" />
         </div>
 
         <USeparator class="mb-6" />
 
         <!-- Fuel & Features -->
         <p class="text-xl font-bold mb-3">Fuel & Features</p>
-        <div class="flex flex-wrap gap-2">
-          <UBadge v-for="tag in tags" :key="tag" :color="selectedTag === tag ? 'primary' : 'neutral'"
-            :variant="selectedTag === tag ? 'solid' : 'soft'" class="cursor-pointer select-none"
-            @click="toggleFilter('tag', tag)">
-            {{ tag }}
-          </UBadge>
+        <div class="flex flex-col gap-2.5">
+          <UCheckbox v-for="tag in tags" :key="tag" :model-value="selectedTags.includes(tag)" :label="tag"
+            color="primary" @update:model-value="toggleFilter('tag', tag)" />
         </div>
       </aside>
 
@@ -111,8 +89,10 @@
 
         <!-- Car Grid -->
         <div v-else class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-3 gap-6">
-          <CarCard v-for="car in visibleCars" :key="car.id" :data="car" :selected-category="selectedCategory"
-            :selected-brand="selectedBrand" :selected-tag="selectedTag"
+          <CarCard v-for="car in visibleCars" :key="car.id" :data="car"
+            :selected-category="selectedCategories.includes(car.category) ? car.category : ''"
+            :selected-brand="selectedBrands.includes(car.brand) ? car.brand : ''"
+            :selected-tag="selectedTags.includes(car.fuel) ? car.fuel : (selectedTags.includes(car.transmission) ? car.transmission : '')"
             @filter-category="toggleFilter('category', $event)" @filter-brand="toggleFilter('brand', $event)"
             @filter-tag="toggleFilter('tag', $event)" />
         </div>
@@ -158,9 +138,9 @@ const tags = [
 const search = ref('')
 const sort = ref('asc')
 const page = ref(1)
-const selectedCategory = ref('')
-const selectedBrand = ref('')
-const selectedTag = ref('')
+const selectedCategories = ref<string[]>([])
+const selectedBrands = ref<string[]>([])
+const selectedTags = ref<string[]>([])
 
 // ── Sort Options ────────────────────────────────────────────────────────────
 const sortOptions = [
@@ -173,9 +153,9 @@ const sortOptions = [
 // ── Route & Filter Sync ──────────────────────────────────────────────────────
 function syncFiltersFromRoute() {
   // Reset all filters first to prevent sticky states on route transitions
-  selectedCategory.value = ''
-  selectedBrand.value = ''
-  selectedTag.value = ''
+  selectedCategories.value = []
+  selectedBrands.value = []
+  selectedTags.value = []
   search.value = ''
 
   // 1. Sync from route query params
@@ -184,30 +164,41 @@ function syncFiltersFromRoute() {
   }
 
   if (route.query.tag) {
-    const queryTag = String(route.query.tag)
-    const matchedCategory = categories.find(c => c.toLowerCase() === queryTag.toLowerCase())
-    if (matchedCategory) {
-      selectedCategory.value = matchedCategory
-    } else {
-      const matchedTag = tags.find(t => t.toLowerCase() === queryTag.toLowerCase())
-      if (matchedTag) {
-        selectedTag.value = matchedTag
+    const tagsArray = Array.isArray(route.query.tag) ? route.query.tag : String(route.query.tag).split(',')
+    tagsArray.forEach(t => {
+      const queryTag = String(t)
+      const matchedCategory = categories.find(c => c.toLowerCase() === queryTag.toLowerCase())
+      if (matchedCategory) {
+        if (!selectedCategories.value.includes(matchedCategory)) {
+          selectedCategories.value.push(matchedCategory)
+        }
+      } else {
+        const matchedTag = tags.find(tag => tag.toLowerCase() === queryTag.toLowerCase())
+        if (matchedTag && !selectedTags.value.includes(matchedTag)) {
+          selectedTags.value.push(matchedTag)
+        }
       }
-    }
+    })
   }
 
   if (route.query.category) {
-    const matchedCategory = categories.find(c => c.toLowerCase() === String(route.query.category).toLowerCase())
-    if (matchedCategory) {
-      selectedCategory.value = matchedCategory
-    }
+    const cats = Array.isArray(route.query.category) ? route.query.category : String(route.query.category).split(',')
+    cats.forEach(c => {
+      const matched = categories.find(cat => cat.toLowerCase() === String(c).toLowerCase())
+      if (matched && !selectedCategories.value.includes(matched)) {
+        selectedCategories.value.push(matched)
+      }
+    })
   }
 
   if (route.query.brand) {
-    const matchedBrand = brands.find(b => b.toLowerCase() === String(route.query.brand).toLowerCase())
-    if (matchedBrand) {
-      selectedBrand.value = matchedBrand
-    }
+    const brs = Array.isArray(route.query.brand) ? route.query.brand : String(route.query.brand).split(',')
+    brs.forEach(b => {
+      const matched = brands.find(brand => brand.toLowerCase() === String(b).toLowerCase())
+      if (matched && !selectedBrands.value.includes(matched)) {
+        selectedBrands.value.push(matched)
+      }
+    })
   }
 
   // 2. Sync from path params [...brand] (e.g. /brands/hyundai)
@@ -216,20 +207,20 @@ function syncFiltersFromRoute() {
       const pDecoded = decodeURIComponent(param).toLowerCase()
 
       const matchedBrand = brands.find(b => b.toLowerCase() === pDecoded)
-      if (matchedBrand) {
-        selectedBrand.value = matchedBrand
+      if (matchedBrand && !selectedBrands.value.includes(matchedBrand)) {
+        selectedBrands.value.push(matchedBrand)
         return
       }
 
       const matchedCategory = categories.find(c => c.toLowerCase() === pDecoded)
-      if (matchedCategory) {
-        selectedCategory.value = matchedCategory
+      if (matchedCategory && !selectedCategories.value.includes(matchedCategory)) {
+        selectedCategories.value.push(matchedCategory)
         return
       }
 
       const matchedTag = tags.find(t => t.toLowerCase() === pDecoded)
-      if (matchedTag) {
-        selectedTag.value = matchedTag
+      if (matchedTag && !selectedTags.value.includes(matchedTag)) {
+        selectedTags.value.push(matchedTag)
         return
       }
     })
@@ -244,9 +235,9 @@ function updateRouteQuery() {
   const query: Record<string, any> = {}
 
   if (search.value) query.q = search.value
-  if (selectedCategory.value) query.category = selectedCategory.value
-  if (selectedBrand.value) query.brand = selectedBrand.value
-  if (selectedTag.value) query.tag = selectedTag.value
+  if (selectedCategories.value.length) query.category = selectedCategories.value.join(',')
+  if (selectedBrands.value.length) query.brand = selectedBrands.value.join(',')
+  if (selectedTags.value.length) query.tag = selectedTags.value.join(',')
 
   router.replace({
     query
@@ -261,23 +252,42 @@ watch(search, () => {
 
 // ── Filter Helpers ──────────────────────────────────────────────────────────
 const hasActiveFilters = computed(() =>
-  !!selectedCategory.value || !!selectedBrand.value ||
-  !!selectedTag.value || !!search.value
+  selectedCategories.value.length > 0 || selectedBrands.value.length > 0 ||
+  selectedTags.value.length > 0 || !!search.value
 )
 
-/** Toggle a single filter – clicking the active value clears it */
+/** Toggle a filter – clicking the value checks/unchecks it */
 function toggleFilter(type: 'category' | 'brand' | 'tag', value: string) {
-  if (type === 'category') selectedCategory.value = selectedCategory.value === value ? '' : value
-  if (type === 'brand') selectedBrand.value = selectedBrand.value === value ? '' : value
-  if (type === 'tag') selectedTag.value = selectedTag.value === value ? '' : value
+  if (type === 'category') {
+    const idx = selectedCategories.value.indexOf(value)
+    if (idx > -1) {
+      selectedCategories.value.splice(idx, 1)
+    } else {
+      selectedCategories.value.push(value)
+    }
+  } else if (type === 'brand') {
+    const idx = selectedBrands.value.indexOf(value)
+    if (idx > -1) {
+      selectedBrands.value.splice(idx, 1)
+    } else {
+      selectedBrands.value.push(value)
+    }
+  } else if (type === 'tag') {
+    const idx = selectedTags.value.indexOf(value)
+    if (idx > -1) {
+      selectedTags.value.splice(idx, 1)
+    } else {
+      selectedTags.value.push(value)
+    }
+  }
   page.value = 1
   updateRouteQuery()
 }
 
 function clearAllFilters() {
-  selectedCategory.value = ''
-  selectedBrand.value = ''
-  selectedTag.value = ''
+  selectedCategories.value = []
+  selectedBrands.value = []
+  selectedTags.value = []
   search.value = ''
   page.value = 1
   updateRouteQuery()
@@ -294,16 +304,19 @@ const filteredCars = computed(() => {
     )
   }
 
-  if (selectedCategory.value)
-    result = result.filter(car => car.category === selectedCategory.value)
+  if (selectedCategories.value.length > 0) {
+    result = result.filter(car => selectedCategories.value.includes(car.category))
+  }
 
-  if (selectedBrand.value)
-    result = result.filter(car => car.brand === selectedBrand.value)
+  if (selectedBrands.value.length > 0) {
+    result = result.filter(car => selectedBrands.value.includes(car.brand))
+  }
 
-  if (selectedTag.value) {
-    const t = selectedTag.value
+  if (selectedTags.value.length > 0) {
     result = result.filter(car =>
-      car.fuel === t || car.transmission === t || car.features.includes(t)
+      selectedTags.value.includes(car.fuel) ||
+      selectedTags.value.includes(car.transmission) ||
+      car.features.some(f => selectedTags.value.includes(f))
     )
   }
 
