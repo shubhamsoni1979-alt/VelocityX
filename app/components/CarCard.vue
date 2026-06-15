@@ -16,7 +16,7 @@
         <UBadge
           color="success"
           variant="solid"
-          class="absolute top-3 left-3 shadow text-xs"
+          class="absolute top-3 left-3 shadow text-xs animate-pulse"
         >
           {{ data.badge }}
         </UBadge>
@@ -26,23 +26,21 @@
     <!-- ── Card Body ── -->
     <div class="p-4" :class="{ '!p-3': small }">
 
-      <!-- Category badge -->
+      <!-- Category and Brand badges -->
       <div class="flex flex-wrap gap-2 mb-3" :class="{ 'mb-2': small }">
         <UBadge
           color="primary"
-          :variant="selectedCategory === data.category ? 'solid' : 'outline'"
-          class="cursor-pointer"
+          variant="solid"
+          class="select-none"
           :class="{ 'text-[10px] px-1.5 py-0.5': small }"
-          @click.stop="emit('filterCategory', data.category)"
         >
           {{ data.category }}
         </UBadge>
         <UBadge
-          :color="selectedBrand === data.brand ? 'primary' : 'neutral'"
-          :variant="selectedBrand === data.brand ? 'solid' : 'soft'"
-          class="cursor-pointer"
+          color="neutral"
+          variant="soft"
+          class="select-none"
           :class="{ 'text-[10px] px-1.5 py-0.5': small }"
-          @click.stop="emit('filterBrand', data.brand)"
         >
           {{ data.brand }}
         </UBadge>
@@ -58,35 +56,19 @@
       <div v-if="!small" class="grid grid-cols-2 gap-y-2 text-sm mb-4">
         <div class="flex items-center gap-1">
           <span class="font-medium text-gray-600 dark:text-gray-400">Fuel:</span>
-          <UButton
-            size="xs"
-            :variant="selectedTag === data.fuel ? 'solid' : 'ghost'"
-            :color="selectedTag === data.fuel ? 'primary' : 'neutral'"
-            class="!px-1 !py-0 !h-auto text-xs"
-            @click.stop="emit('filterTag', data.fuel)"
-          >
-            {{ data.fuel }}
-          </UButton>
+          <span class="text-gray-900 dark:text-white font-semibold">{{ data.fuel }}</span>
         </div>
 
         <div class="flex items-center gap-1">
           <span class="font-medium text-gray-600 dark:text-gray-400">Trans:</span>
-          <UButton
-            size="xs"
-            :variant="selectedTag === data.transmission ? 'solid' : 'ghost'"
-            :color="selectedTag === data.transmission ? 'primary' : 'neutral'"
-            class="!px-1 !py-0 !h-auto text-xs"
-            @click.stop="emit('filterTag', data.transmission)"
-          >
-            {{ data.transmission }}
-          </UButton>
+          <span class="text-gray-900 dark:text-white font-semibold">{{ data.transmission }}</span>
         </div>
 
-        <div class="text-gray-600 dark:text-gray-400">
-          <span class="font-medium">Owner:</span> {{ data.ownership }}
+        <div class="text-gray-600 dark:text-gray-400 flex items-center gap-1">
+          <span class="font-medium">Owner:</span> <span class="text-gray-900 dark:text-white font-semibold">{{ data.ownership }}</span>
         </div>
-        <div class="text-gray-600 dark:text-gray-400">
-          <span class="font-medium">KM:</span> {{ data.kmDriven }}
+        <div class="text-gray-600 dark:text-gray-400 flex items-center gap-1">
+          <span class="font-medium">KM:</span> <span class="text-gray-900 dark:text-white font-semibold">{{ data.kmDriven }}</span>
         </div>
       </div>
 
@@ -95,10 +77,9 @@
         <UBadge
           v-for="feature in data.features"
           :key="feature"
-          :color="selectedTag === feature ? 'primary' : 'neutral'"
-          :variant="selectedTag === feature ? 'solid' : 'soft'"
-          class="cursor-pointer"
-          @click.stop="emit('filterTag', feature)"
+          color="neutral"
+          variant="soft"
+          class="select-none"
         >
           {{ feature }}
         </UBadge>
@@ -156,16 +137,7 @@ interface Car {
 
 const props = defineProps<{
   data: Car
-  selectedCategory?: string
-  selectedBrand?: string
-  selectedTag?: string
   small?: boolean
-}>()
-
-const emit = defineEmits<{
-  filterCategory: [value: string]
-  filterBrand: [value: string]
-  filterTag: [value: string]
 }>()
 
 const router = useRouter()

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppFoooter from '~/components/App-Foooter.vue';
-import AppHeader from '~/components/App-header.vue';
+import AppHeader from '~/components/App-Header.vue';
 
 </script>
 
