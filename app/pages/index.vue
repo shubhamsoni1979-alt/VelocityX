@@ -9,8 +9,7 @@ useSeoMeta({
     <div class="home-page">
         <HomeHero />
         <home-explorepopularbrand/>
-        <home-trendingcar />
-        <HomePopularCategories />
+        <!-- <home-trendingcar /> -->
         <home-bodytype/>
         <home-manageyourvehicle/>
         <home-carousel/>

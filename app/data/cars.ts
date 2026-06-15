@@ -1,0 +1,101 @@
+export interface Car {
+  id: number
+  brand: string
+  model: string
+  variant: string
+  year: number
+  category: string
+  fuel: string
+  transmission: string
+  ownership: string
+  kmDriven: string
+  originalPrice: number
+  discountedPrice: number
+  emi: number
+  badge: string
+  features: string[]
+  image: string
+}
+
+export const allCars: Car[] = [
+  {
+    id: 1, brand: 'Hyundai', model: 'Creta', variant: 'SX(O)', year: 2022,
+    category: 'SUV', fuel: 'Petrol', transmission: 'Automatic',
+    ownership: '1st', kmDriven: '22,000',
+    originalPrice: 1850000, discountedPrice: 1599000, emi: 28999,
+    badge: 'Assured', features: ['Sunroof', 'ADAS'],
+    image: '/explorecar/file (1).avif',
+  },
+  {
+    id: 2, brand: 'Kia', model: 'Seltos', variant: 'GT Line', year: 2021,
+    category: 'SUV', fuel: 'Diesel', transmission: 'Automatic',
+    ownership: '1st', kmDriven: '31,000',
+    originalPrice: 1790000, discountedPrice: 1499000, emi: 26999,
+    badge: 'Top Pick', features: ['Sunroof'],
+    image: '/explorecar/file (2).avif',
+  },
+  {
+    id: 3, brand: 'Mahindra', model: 'XUV700', variant: 'AX7', year: 2023,
+    category: 'SUV', fuel: 'Petrol', transmission: 'Automatic',
+    ownership: '1st', kmDriven: '14,000',
+    originalPrice: 2490000, discountedPrice: 2199000, emi: 39999,
+    badge: 'Great Deal', features: ['ADAS', 'Sunroof'],
+    image: '/explorecar/file (3).avif',
+  },
+  {
+    id: 4, brand: 'Honda', model: 'Elevate', variant: 'ZX CVT', year: 2022,
+    category: 'SUV', fuel: 'Petrol', transmission: 'Automatic',
+    ownership: '2nd', kmDriven: '28,000',
+    originalPrice: 1750000, discountedPrice: 1450000, emi: 25999,
+    badge: 'Assured', features: [],
+    image: '/explorecar/file (4).avif',
+  },
+  {
+    id: 5, brand: 'Tata', model: 'Harrier', variant: 'XZ+', year: 2021,
+    category: 'SUV', fuel: 'Diesel', transmission: 'Manual',
+    ownership: '1st', kmDriven: '40,000',
+    originalPrice: 2200000, discountedPrice: 1849000, emi: 32999,
+    badge: 'Top Pick', features: ['Sunroof'],
+    image: '/explorecar/file.avif',
+  },
+  {
+    id: 6, brand: 'Tata', model: 'Nexon EV', variant: 'Max', year: 2023,
+    category: 'EV', fuel: 'Electric', transmission: 'Automatic',
+    ownership: '1st', kmDriven: '10,000',
+    originalPrice: 2100000, discountedPrice: 1899000, emi: 34999,
+    badge: 'Great Deal', features: [],
+    image: '/explorecar/file (1).avif',
+  },
+  {
+    id: 7, brand: 'Maruti Suzuki', model: 'Baleno', variant: 'Alpha', year: 2022,
+    category: 'Hatchback', fuel: 'Petrol', transmission: 'Manual',
+    ownership: '1st', kmDriven: '18,000',
+    originalPrice: 850000, discountedPrice: 720000, emi: 12999,
+    badge: 'Assured', features: [],
+    image: '/cars/baleno.webp',
+  },
+  {
+    id: 8, brand: 'Hyundai', model: 'i20', variant: 'Asta', year: 2021,
+    category: 'Hatchback', fuel: 'Petrol', transmission: 'Automatic',
+    ownership: '1st', kmDriven: '25,000',
+    originalPrice: 950000, discountedPrice: 780000, emi: 13999,
+    badge: 'Top Pick', features: ['Sunroof'],
+    image: '/cars/i10.webp',
+  },
+  {
+    id: 9, brand: 'Honda', model: 'City', variant: 'ZX', year: 2022,
+    category: 'Sedan', fuel: 'Petrol', transmission: 'Automatic',
+    ownership: '1st', kmDriven: '20,000',
+    originalPrice: 1550000, discountedPrice: 1290000, emi: 23999,
+    badge: 'Assured', features: ['Sunroof', 'ADAS'],
+    image: '/explorecar/file (2).avif',
+  },
+  {
+    id: 10, brand: 'Hyundai', model: 'Verna', variant: 'SX(O)', year: 2023,
+    category: 'Sedan', fuel: 'Petrol', transmission: 'Automatic',
+    ownership: '1st', kmDriven: '12,000',
+    originalPrice: 1750000, discountedPrice: 1490000, emi: 26999,
+    badge: 'Great Deal', features: ['Sunroof', 'ADAS'],
+    image: '/explorecar/file (3).avif',
+  }
+]

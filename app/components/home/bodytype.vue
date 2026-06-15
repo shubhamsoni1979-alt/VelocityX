@@ -1,94 +1,78 @@
+<script setup lang="ts">
+import { allCars } from '../../data/cars'
+import CarCard from '../CarCard.vue'
 
+const selected = ref(0)
+
+const items = [
+  {
+    label: 'Hatchback',
+    image: '/bodytype/image-Photoroom.png'
+  },
+  {
+    label: 'Sedan',
+    image: '/bodytype/Screenshot 2026-06-12 181428-Photoroom.png'
+  },
+  {
+    label: 'SUV',
+    image: '/bodytype/Screenshot 2026-06-12 181436-Photoroom.png'
+  },
+  {
+    label: 'EV',
+    image: '/bodytype/image-Photoroom.png'
+  }
+]
+
+const displayedCars = computed(() => {
+  const label = items[selected.value]?.label
+  if (!label) return []
+  return allCars
+    .filter(car => car.category.toLowerCase() === label.toLowerCase())
+    .slice(0, 3)
+})
+
+const buttonText = computed(() => {
+  return `View all ${items[selected.value]?.label.toLowerCase()}s`
+})
+
+const router = useRouter()
+function goToBrands() {
+  const tag = items[selected.value]?.label || ''
+  router.push({ path: '/brands', query: { tag } })
+}
+</script>
 
 <template>
-    <UContainer>
-  <section class=" py-8 space-y-10">
-     <div class="flex items-center gap-6 mb-10">
-        <div class="flex-1 h-px bg-gray-300" />
-        <h2 class="text-4xl font-bold text-purple-900">
-          Explore by Body Type
-        </h2>
-        <div class="flex-1 h-px bg-gray-300" />
-      </div>
-
-    <UTabs
-      :items="bodyTypes"
-      class="max-w-xl mx-auto"
-    >
-      <template #leading="{ item }">
-        <UIcon :name="item.icon" />
-      </template>
-    </UTabs>
-
-    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-      <UCard
-        v-for="car in cars"
-        :key="car.name"
-        class="overflow-hidden p-0"
-      >
-        <img
-          :src="car.image"
-          :alt="car.name"
-          class="h-52 w-full object-cover"
-        >
-
-        <template #footer>
-          <h3 class="font-medium">
-            {{ car.name }}
-          </h3>
-
-          <p class="text-2xl font-bold mt-1">
-            {{ car.price }}
-            <span class="text-sm text-muted">
-              onwards
-            </span>
-          </p>
+  <section class="py-8">
+    <!-- Body Type Tabs -->
+    <div class="flex justify-center">
+      <UTabs v-model="selected" :items="items" color="neutral" class="w-fit py-6">
+        <template #default="{ item }">
+          <div class="flex items-center justify-center gap-2 px-4 py-2">
+            <img :src="item.image" :alt="item.label" class="h-10 w-auto">
+            <span class="font-medium text-sm">{{ item.label }}</span>
+          </div>
         </template>
-      </UCard>
+      </UTabs>
     </div>
 
-    <div class="text-center">
-      <UButton
-        variant="outline"
-        size="xl"
-        trailing-icon="i-lucide-arrow-right"
-      >
-        View all hatchbacks
+    <!-- Car Cards -->
+    <div class="mx-auto max-w-7xl px-4 mt-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
+        <CarCard
+          v-for="car in displayedCars"
+          :key="car.id"
+          :data="car"
+          :small="true"
+        />
+      </div>
+    </div>
+
+    <!-- Fixed Width Dynamic Button -->
+    <div class="mt-16 flex justify-center">
+      <UButton color="neutral" size="xl" class="w-72 justify-center rounded-2xl py-4" @click="goToBrands">
+        {{ buttonText }}
       </UButton>
     </div>
   </section>
-  </UContainer>
 </template>
-
-
-<script setup lang="ts">
-const bodyTypes = [
-  { label: 'Hatchback', icon: 'i-lucide-car-front' },
-  { label: 'Sedan', icon: 'i-lucide-car' },
-  { label: 'SUV', icon: 'i-lucide-truck' },
-  { label: 'MUV', icon: 'i-lucide-bus' }
-]
-
-const cars = [
-  {
-    name: 'Maruti Suzuki Baleno',
-    price: '₹3.63 Lakh',
-    image: '/cars/baleno.webp'
-  },
-  {
-    name: 'Hyundai Grand i10',
-    price: '₹3.12 Lakh',
-    image: '/cars/i10.webp'
-  },
-  {
-    name: 'Maruti Suzuki Alto 800',
-    price: '₹1.86 Lakh',
-    image: '/cars/alto.webp'
-  },
-  {
-    name: 'Renault Kwid',
-    price: '₹1.91 Lakh',
-    image: '/cars/kwid.webp'
-  }
-]
-</script>

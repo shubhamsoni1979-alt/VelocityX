@@ -48,7 +48,7 @@ const trendingCars = [
          <div class="flex items-center gap-6 mb-10">
         <div class="flex-1 h-px bg-gray-300" />
         <h2 class="text-4xl font-bold text-purple-900">
-          Explore Popular Brands
+          Trending New Car
         </h2>
         <div class="flex-1 h-px bg-gray-300" />
       </div>

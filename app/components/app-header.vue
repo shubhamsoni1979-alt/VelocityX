@@ -1,8 +1,12 @@
 <template>
+     <div class="sticky top-0 z-50 bg-white border-b border-default shadow-sm">
     <UContainer>
-        <UHeader  :ui="{
-    container: 'w-full max-w-none !px-0 sm:!px-0 lg:!px-0'
-  }">
+        <UHeader 
+
+  :ui="{
+    container: ' sticky top-0 z-50 w-full max-w-none px-0 sm:px-0 lg:px-0'
+  }"
+>
             <!-- Logo -->
             <template #title>
                 <NuxtLink to="/">
@@ -26,7 +30,7 @@
             <!-- Right Side -->
             <template #right>
                 <div class="flex items-center gap-3">
-                    <UColorModeButton />
+                    <!-- <UColorModeButton /> -->
 
                     <UButton icon="i-heroicons-user" color="neutral" variant="soft" class="rounded-full">
                         Login
@@ -46,6 +50,7 @@
             </template>
         </UHeader>
     </UContainer>
+    </div>  
 </template>
 
 <script setup lang="ts">
