@@ -3,7 +3,7 @@
 VelocityX is a premium, feature-rich Used Car Buying and Selling web application built using Nuxt 3, TypeScript, and Tailwind CSS. The platform enables users to search, filter, and explore a comprehensive inventory of certified used cars, view details, and book test drives.
 
 ---
-Open [[https://vercel.com/shubhamsoni1979-alts-projects/velocity-x-up4n](https://vercel.com/shubhamsoni1979-alts-projects/velocity-x-up4n)]in your browser to view the application.
+Open [[https://velocity-x-up4n-henna.vercel.app/](https://velocity-x-up4n-henna.vercel.app/)]in your browser to view the application.
 Open video link - https://drive.google.com/file/d/1TJn4AfQqTWEmEEEfW9uhDNSprKaKQ_fB/view?usp=drive_link
 
 
