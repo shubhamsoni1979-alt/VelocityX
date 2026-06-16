@@ -4,6 +4,7 @@ VelocityX is a premium, feature-rich Used Car Buying and Selling web application
 
 ---
 Open [https://velocity-x-s67j-topaz.vercel.app/](https://velocity-x-s67j-topaz.vercel.app/) in your browser to view the application.
+Open video link - https://drive.google.com/file/d/1TJn4AfQqTWEmEEEfW9uhDNSprKaKQ_fB/view?usp=drive_link
 
 
 ## 🛠️ Tech Stack
