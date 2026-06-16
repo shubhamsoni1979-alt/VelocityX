@@ -7,7 +7,7 @@
       }">
       <template #links>
         <div class="flex gap-4">
-          <UButton to="/brands/Suv" color="neutral" icon="i-lucide-arrow-right">
+          <UButton to="/brands" color="neutral" icon="i-lucide-arrow-right">
             Explore Cars
           </UButton>
         </div>

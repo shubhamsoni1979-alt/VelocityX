@@ -1,5 +1,17 @@
 <template>
-  <UContainer>
+  <UContainer class="py-8">
+    <!-- Back to Home -->
+    <div class="mb-6">
+      <UButton
+        icon="i-lucide-arrow-left"
+        label="Back to Home"
+        variant="ghost"
+        color="neutral"
+        class="hover:translate-x-[-4px] transition-transform"
+        to="/"
+      />
+    </div>
+
     <!-- brand hero section  -->
     <UPageHero
       :ui="{

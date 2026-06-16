@@ -1,5 +1,17 @@
 <template>
   <UContainer class="py-8">
+    <!-- Back to Home -->
+    <div class="mb-6">
+      <UButton
+        icon="i-lucide-arrow-left"
+        label="Back to Home"
+        variant="ghost"
+        color="neutral"
+        class="hover:translate-x-[-4px] transition-transform"
+        to="/"
+      />
+    </div>
+
     <h1 class="text-5xl font-bold mb-8">Explore Cars</h1>
 
     <div class="grid grid-cols-12 gap-8">

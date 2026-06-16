@@ -1,5 +1,17 @@
 <template>
   <UContainer class="py-8">
+    <!-- Back to Home -->
+    <div class="mb-6">
+      <UButton
+        icon="i-lucide-arrow-left"
+        label="Back to Home"
+        variant="ghost"
+        color="neutral"
+        class="hover:translate-x-[-4px] transition-transform"
+        to="/"
+      />
+    </div>
+
     <h1 class="text-5xl font-bold mb-8">Explore Cars</h1>
 
     <div class="grid grid-cols-12 gap-8">
@@ -9,30 +21,7 @@
       ══════════════════════════════ -->
       <aside class="col-span-12 lg:col-span-3 sticky top-24 self-start h-fit">
 
-        <!-- Search -->
-        <!-- <UInput v-model="search" icon="i-lucide-search" placeholder="Search Brand, Model or Variant" class="mb-6" /> -->
-
-        <!-- Active Filters pill strip -->
-        <!-- <div v-if="hasActiveFilters" class="flex flex-wrap gap-2 mb-6">
-          <template v-for="category in selectedCategories" :key="`cat-${category}`">
-            <UBadge color="neutral" class="cursor-pointer gap-1" @click="toggleFilter('category', category)">
-              {{ category }} &nbsp;×
-            </UBadge>
-          </template>
-<template v-for="brand in selectedBrands" :key="`brand-${brand}`">
-            <UBadge color="neutral" class="cursor-pointer" @click="toggleFilter('brand', brand)">
-              {{ brand }} &nbsp;×
-            </UBadge>
-          </template>
-<template v-for="tag in selectedTags" :key="`tag-${tag}`">
-            <UBadge color="neutral" class="cursor-pointer" @click="toggleFilter('tag', tag)">
-              {{ tag }} &nbsp;×
-            </UBadge>
-          </template>
-<UButton size="xs" variant="ghost" color="error" @click="clearAllFilters">
-  Clear all
-</UButton>
-</div> -->
+      
 
         <!-- Body Type -->
         <p class="text-xl font-bold mb-3">Body Type</p>

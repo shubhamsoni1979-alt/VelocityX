@@ -1,94 +1,81 @@
 <template>
-     <div class="sticky top-0 z-50 bg-white border-b border-default shadow-sm">
-    <UContainer>
-        <UHeader 
+    <div class="sticky top-0 z-50 bg-white border-b border-default shadow-sm">
+        <UContainer>
+            <UHeader :ui="{
+                container: ' sticky top-0 z-50 w-full max-w-none px-0 sm:px-0 lg:px-0'
+            }">
+                <!-- Logo -->
+                <template #title>
+                    <NuxtLink to="/">
+                        <NuxtImg src="/VelocityX-light-logo.png" alt="VelocityX" class="h-10 w-auto dark:hidden" />
+                        <NuxtImg src="/VelocityX-dark-logo.png" alt="VelocityX" class="h-10 w-auto hidden dark:block" />
+                    </NuxtLink>
+                </template>
 
-  :ui="{
-    container: ' sticky top-0 z-50 w-full max-w-none px-0 sm:px-0 lg:px-0'
-  }"
->
-            <!-- Logo -->
-            <template #title>
-                <NuxtLink to="/">
-                    <NuxtImg src="/VelocityX-light-logo.png" alt="VelocityX" class="h-10 w-auto dark:hidden" />
-                    <NuxtImg src="/VelocityX-dark-logo.png" alt="VelocityX" class="h-10 w-auto hidden dark:block" />
-                </NuxtLink>
-            </template>
+                <!-- Center Search -->
+                <template>
+                    <div class="px-2 relative w-full max-w-5xl">
+                        <UInput v-model="searchQuery" placeholder="Search used cars "
+                            icon="i-heroicons-magnifying-glass" size="xl" class="w-full" :ui="{
+                                base: 'rounded-full',
+                                root: 'w-full'
+                            }" @keyup.enter="applyfilters" @focus="showSuggestions = true" @blur="onBlur" />
 
-            <!-- Center Search -->
-            <template>
-                <div class="px-2 relative w-full max-w-5xl">
-                    <UInput 
-                        v-model="searchQuery" 
-                        placeholder="Search Brand or Model..." 
-                        icon="i-heroicons-magnifying-glass" 
-                        size="xl"
-                        class="w-full" 
-                        :ui="{
-                            base: 'rounded-full',
-                            root: 'w-full'
-                        }" 
-                        @keyup.enter="applyfilters"
-                        @focus="showSuggestions = true"
-                        @blur="onBlur"
-                    />
-
-                    <!-- Suggestions Dropdown -->
-                    <div 
-                        v-if="showSuggestions && filteredSuggestions.length > 0"
-                        class="absolute left-2 right-2 top-full mt-2 bg-white dark:bg-neutral-900 border border-gray-100 dark:border-neutral-800 rounded-2xl shadow-xl z-50 overflow-hidden py-2 max-h-72 overflow-y-auto"
-                    >
-                        <div 
-                            v-for="suggestion in filteredSuggestions" 
-                            :key="suggestion.text"
-                            class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer flex items-center justify-between transition-colors group"
-                            @mousedown="selectSuggestion(suggestion)"
-                        >
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 bg-primary/10 rounded-xl text-primary flex items-center justify-center">
-                                    <UIcon :name="suggestion.type === 'brand' ? 'i-heroicons-tag' : 'i-heroicons-sparkles'" class="w-4 h-4" />
+                        <!-- Suggestions Dropdown -->
+                        <div v-if="showSuggestions && filteredSuggestions.length > 0"
+                            class="absolute left-2 right-2 top-full mt-2 bg-white dark:bg-neutral-900 border border-gray-100 dark:border-neutral-800 rounded-2xl shadow-xl z-50 overflow-hidden py-2 max-h-72 overflow-y-auto">
+                            <div v-for="suggestion in filteredSuggestions" :key="suggestion.text"
+                                class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-neutral-800 cursor-pointer flex items-center justify-between transition-colors group"
+                                @mousedown="selectSuggestion(suggestion)">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="p-2 bg-primary/10 rounded-xl text-primary flex items-center justify-center">
+                                        <UIcon
+                                            :name="suggestion.type === 'brand' ? 'i-heroicons-tag' : 'i-heroicons-sparkles'"
+                                            class="w-4 h-4" />
+                                    </div>
+                                    <div class="text-left">
+                                        <p
+                                            class="font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors text-sm">
+                                            {{ suggestion.text }}
+                                        </p>
+                                        <p class="text-[10px] text-gray-400 capitalize">
+                                            {{ suggestion.category }}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="text-left">
-                                    <p class="font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors text-sm">
-                                        {{ suggestion.text }}
-                                    </p>
-                                    <p class="text-[10px] text-gray-400 capitalize">
-                                        {{ suggestion.category }}
-                                    </p>
-                                </div>
+                                <span class="text-xs text-gray-400 group-hover:translate-x-1 transition-transform mr-1">
+                                    <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
+                                </span>
                             </div>
-                            <span class="text-xs text-gray-400 group-hover:translate-x-1 transition-transform mr-1">
-                                <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
-                            </span>
                         </div>
                     </div>
-                </div>
-            </template>
+                </template>
 
-            <!-- Right Side -->
-            <template #right>
-                <div class="flex items-center gap-3">
-                    <!-- <UColorModeButton /> -->
+                <!-- Right Side -->
+                <template #right>
+                    <div class="flex items-center gap-3">
+                        <!-- <UColorModeButton /> -->
 
-                    <UButton icon="i-heroicons-user" color="neutral" variant="soft" class="rounded-full">
-                        Login
-                    </UButton>
-                </div>
-            </template>
+                        <UButton icon="i-heroicons-user" color="neutral" variant="soft" class="rounded-full">
+                            Login
+                        </UButton>
+                    </div>
+                </template>
 
-            <!-- Mobile -->
-            <template #body>
-                <div class="md:hidden space-y-4 border-t pt-4">
+                <!-- Mobile -->
+                <template #body>
+                    <div class="md:hidden space-y-4 border-t pt-4">
 
 
-                    <UButton icon="i-heroicons-user" color="neutral" variant="soft" block>
-                        Login
-                    </UButton>
-                </div>
-            </template>
-        </UHeader>
-    </UContainer>
-    </div>  
+                        <UButton icon="i-heroicons-user" color="neutral" variant="soft" block>
+                            Login
+                        </UButton>
+                    </div>
+                </template>
+            </UHeader>
+        </UContainer>
+    </div>
 </template>
 
 <script setup lang="ts">
